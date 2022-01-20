@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-app-service
+spec:
+  selector:
+    app: node-web-app
+  ports:
+    - protocol: "TCP"
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-web-app
+spec:
+  selector:
+    matchLabels:
+      app: node-web-app
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: node-web-app
+    spec:
+      containers:
+        - name: node-web-app
+          image: babydragon9703111/node-web-app:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
