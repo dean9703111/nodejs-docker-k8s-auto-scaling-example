@@ -239,10 +239,16 @@
   ```
   剛下達指令刪除時，在 STATUS 的部分會顯示 Terminating，過一段時間就會消失嚕～
   ![image](./img/k8s_delete.png)
+- 關閉 minikube
+  ```sh
+  # 如果沒關閉的話，你會發現電腦燙燙的，CPU 居高不下
+  minikube delete
+  ```
+  ![image](./img/minikube_delete.png)
 
 ---
 
-# 帶你了解 K8s Auto Scaling 並模擬實際情境（可在 Local 端測試）
+# 模擬 K8s Auto Scaling（可在 Local 端測試）
 
 K8s 最吸引人的其中一個功能應該就是用 Auto Scaling 來應付高併發(High concurrency)情境，今天就用一個水平自動擴展(HPA)的範例來讓大家了解他的實際運作模式。
 
@@ -276,10 +282,10 @@ K8s 最吸引人的其中一個功能應該就是用 Auto Scaling 來應付高�
 > 其實這裡的 Service、Deployment 都是從先前這篇文章改良過來的。
 
 - 調整 Service 參數
-  - nodePort：這裡建議指定一個 port，如果沒有設定的話，最後對外 ip 的 port 為隨機產生。
+  - **nodePort**：這裡建議指定一個 port，如果沒有設定的話，最後對外 ip 的 port 為隨機產生。
 - 調整 Deployment 參數
-  - resources 的 requests：如果 cpu 設定為 `100m`，而 targetCPUUtilizationPercentage 設定為 `10`；當 Pod 的 CPU 使用率為 `1m`（100m x 10%） 的時候就要進行 Auto Scaling。
-  - replicas：特別設定為 1 方便觀察，原則上他的值要跟 minReplicas 相同。
+  - **resources** 的 requests：如果 cpu 設定為 `100m`，而 targetCPUUtilizationPercentage 設定為 `10`；當 Pod 的 CPU 使用率為 `1m`（100m x 10%） 的時候就要進行 Auto Scaling。
+  - **replicas**：特別設定為 1 方便觀察，原則上他的值要跟 minReplicas 相同。
 - 將如下參數加入剛剛建立的`nodetest-k8s-auto.yaml`中
 
   ```yaml
@@ -329,7 +335,7 @@ K8s 最吸引人的其中一個功能應該就是用 Auto Scaling 來應付高�
 
 ### 三、部署＆測試 pod 是否會依據流量的增加自動擴展
 
-- 跟著如下步驟操作即可部署有 Auto Scaling 功能的 K8s
+- 開啟流量監控、部署 K8s
 
   ```sh
   # 將 minikube 監控流量的 addons 打開
@@ -346,7 +352,7 @@ K8s 最吸引人的其中一個功能應該就是用 Auto Scaling 來應付高�
 
   > 一開始 TARGETS 會顯示 `<unknown>`，這是因為還在判斷流量，過一陣子就會顯示百分比了
 
-- 取得 K8s 外部 ip，然後瘋狂存取他來測試 Auto Scaling
+- 取得 Deployment 的外部 ip，然後瘋狂存取來測試 Auto Scaling
 
   ```sh
   # 取得 Deployment 的外部 ip（此時會看到 port 與設定的 nodePort 相同）
@@ -364,9 +370,11 @@ K8s 最吸引人的其中一個功能應該就是用 Auto Scaling 來應付高�
   ![image](./img/k8s_pod_increase.png)
 - 將上面的存取 K8s 外部 ip 的 while 迴圈關掉後，pod 會自動減少到設定的 minReplicas
   ![image](./img/k8s_pod_decrease.png)
-- 測試完成後別忘記把建立的 K8s 服務刪除喔～
+- 測試完成後將建立的 K8s 服務刪除、關閉 minikube
   ```sh
   kubectl delete -f nodetest-k8s-auto.yaml
+  # 如果沒關閉的話，你會發現電腦燙燙的，CPU 居高不下
+  minikube delete
   ```
 
 `如果覺得我寫的文章對你有幫助，千萬不要吝嗇給我一個 ⭐STAR⭐ 喔～`
