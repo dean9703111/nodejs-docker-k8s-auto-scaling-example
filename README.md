@@ -35,7 +35,7 @@
 
 ### 二、建立 Node.js Web App
 
-> 你也可以直接去筆者的 github，直接將專案 clone 到本機來做測試
+> 你也可以直接去[筆者的 github](https://github.com/dean9703111/nodejs-docker-k8s-auto-scaling-example)，直接將專案 clone 到本機來做測試。
 
 - 建立`package.json`
   ```json
@@ -74,7 +74,7 @@
   console.log(`Running on http://${HOST}:${PORT}`);
   ```
 
-- 在終端機輸入`yarn start`運行專案，確認可以運行
+- 在終端機先輸入`yan`將套件安裝，再輸入`yarn start`確認專案可以運行
   ![image](./img/yarn_start.png)
   ![image](./img/yarn_start_web.png)
 
@@ -249,6 +249,8 @@
 K8s 最吸引人的其中一個功能應該就是用 Auto Scaling 來應付高併發(High concurrency)情境，今天就用一個水平自動擴展(HPA)的範例來讓大家了解他的實際運作模式。
 
 ### 一、撰寫 Auto Scaling 的 yaml 檔
+
+> 你也可以直接去[筆者的 github](https://github.com/dean9703111/nodejs-docker-k8s-auto-scaling-example)，直接將專案 clone 到本機來做測試。
 
 - HorizontalPodAutoscaler 參數說明
   - scaleTargetRef：填寫你想要針對哪個 ReplicaSet 或 Deployment 或 Replication Controller 來做 Scaling
