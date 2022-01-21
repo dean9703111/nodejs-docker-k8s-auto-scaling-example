@@ -364,7 +364,7 @@ K8s 最吸引人的其中一個功能應該就是用 Auto Scaling 來應付高�
 
 - 確認 pod（看 REPLICAS 這個欄位）是否會依據流量的增加自動擴展到設定的 maxReplicas
   ![image](./img/k8s_pod_increase.png)
-- 將上面 while 的存取 K8s 外部 ip 的迴圈關掉後，pod 會自動減少到設定的 minReplicas
+- 將上面的存取 K8s 外部 ip 的 while 迴圈關掉後，pod 會自動減少到設定的 minReplicas
   ![image](./img/k8s_pod_decrease.png)
 - 測試完成後別忘記把建立的 K8s 服務刪除喔～
   ```sh
