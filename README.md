@@ -6,11 +6,11 @@
 
 ### 一、安裝 Docker、kubectl、minikube 等工具
 
-- **安裝 Docker**
+- **安裝 Docker**  
   前往[官網下載 Docker 安裝檔](https://docs.docker.com/desktop/mac/install/)，安裝過程就是狂按下一步，就不再多做介紹，下載後要把 App 打開依照步驟執行才算是完成安裝喔！
   ![image](./img/docker_install.png)
   > 這邊建議也註冊一組 Docker 帳號，接下來的操作會比較方便。
-- **安裝 kubectl**
+- **安裝 kubectl**  
   安裝他才能操作 K8s 喔
   ```sh
   # 安裝 kubectl
@@ -20,7 +20,7 @@
   # 查看目前 cluster 運行狀態
   kubectl get all
   ```
-- **安裝 minikube**
+- **安裝 minikube**  
   這個工具可以讓你在本機(Local)架設 K8s 叢集(Cluster)喔
   ```sh
   # 安裝 minikube
