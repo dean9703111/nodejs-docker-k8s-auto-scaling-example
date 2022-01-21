@@ -242,7 +242,7 @@
 
 ---
 
-# 在 Local 端模擬 K8s Auto Scaling
+# 帶你了解 K8s Auto Scaling 並模擬實際情境（可在 Local 端測試）
 
 K8s 最吸引人的其中一個功能應該就是用 Auto Scaling 來應付高併發(High concurrency)情境，今天就用一個水平自動擴展(HPA)的範例來讓大家了解他的實際運作模式。
 
@@ -250,10 +250,10 @@ K8s 最吸引人的其中一個功能應該就是用 Auto Scaling 來應付高�
 
 > 你也可以直接去[筆者的 github](https://github.com/dean9703111/nodejs-docker-k8s-auto-scaling-example)，直接將專案 Clone 到本機來做測試。
 
-- HorizontalPodAutoscaler 參數說明
-  - scaleTargetRef：填寫你想要針對哪個 ReplicaSet 或 Deployment 或 Replication Controller 來做 Scaling
-  - minReplicas、maxReplicas：Pod 擴展範圍
-  - targetCPUUtilizationPercentage：Auto Scaling 是根據 CPU 用量來做擴展，判定的依據為 Deployment resources 的 requests 設定值（如果沒填寫基本上就不會動 XD）
+- HorizontalPodAutoscaler（水平自動擴展）參數說明
+  - **scaleTargetRef**：填寫你想要針對哪個 ReplicaSet 或 Deployment 或 Replication Controller 來做 Scaling。
+  - **minReplicas、maxReplicas**：Pod 擴展範圍。
+  - **targetCPUUtilizationPercentage**：Auto Scaling 是根據 CPU 用量來做擴展，判定的依據為 Deployment resources 的 requests 設定值（如果沒填寫基本上就不會動 XD）。
 - 建立`nodetest-k8s-auto.yaml`來做 Auto Scaling 測試
 
   ```yaml
@@ -275,9 +275,9 @@ K8s 最吸引人的其中一個功能應該就是用 Auto Scaling 來應付高�
 
 > 其實這裡的 Service、Deployment 都是從先前這篇文章改良過來的。
 
-- Service 參數說明
-  - nodePort：這裡建議指定一個 port，如果沒有設定的話，最後對外 ip 的 port 為隨機產生
-- Deployment 參數說明
+- 調整 Service 參數
+  - nodePort：這裡建議指定一個 port，如果沒有設定的話，最後對外 ip 的 port 為隨機產生。
+- 調整 Deployment 參數
   - resources 的 requests：如果 cpu 設定為 `100m`，而 targetCPUUtilizationPercentage 設定為 `10`；當 Pod 的 CPU 使用率為 `1m`（100m x 10%） 的時候就要進行 Auto Scaling。
   - replicas：特別設定為 1 方便觀察，原則上他的值要跟 minReplicas 相同。
 - 將如下參數加入剛剛建立的`nodetest-k8s-auto.yaml`中
