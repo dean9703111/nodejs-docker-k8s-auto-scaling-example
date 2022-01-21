@@ -1,4 +1,4 @@
-# 手把手帶你實作 Node.js X Docker X Kubernetes 超簡單範例
+# 帶你將 Node.js Web App 給 Docker 化，並用 Kubernetes 部署的超簡單範例
 
 公司很早就導入了 Kubernetes（K8s），主要是為了自動化部署以及管理、監測多台機器上的 Container，在遇到高併發情境時可以自動擴展。過去我都是以輔助者的角色跟 DevOps 說我希望有哪些功能，因此對這個技術在懂與不懂之間；所以便藉著寫這篇文章的機會來初探這個已經成為業界潮流的技術。
 
@@ -7,11 +7,11 @@
 ### 一、安裝 Docker、kubectl、minikube 等工具
 
 - **安裝 Docker**  
-  前往[官網下載 Docker 安裝檔](https://docs.docker.com/desktop/mac/install/)，安裝過程就是狂按下一步，就不再多做介紹，下載後要把 App 打開依照步驟執行才算是完成安裝喔！
+  前往[官網下載 Docker 安裝檔](https://docs.docker.com/desktop/mac/install/)，安裝過程就是狂按下一步，這裡就不再多做介紹，下載後要把 App 打開依照步驟執行才算是完成安裝喔！
   ![image](./img/docker_install.png)
-  > 這邊建議也註冊一組 Docker 帳號，接下來的操作會比較方便。
+  > 這邊建議順便註冊一組 Docker 帳號，方便你日後的操作。
 - **安裝 kubectl**  
-  安裝他才能操作 K8s 喔
+  安裝他才能操作 K8s 喔！
   ```sh
   # 安裝 kubectl
   brew install kubectl
@@ -21,7 +21,7 @@
   kubectl get all
   ```
 - **安裝 minikube**  
-  這個工具可以讓你在本機(Local)架設 K8s 叢集(Cluster)喔
+  這個工具可以讓你在本機(Local)架設 K8s 叢集(Cluster)喔！
   ```sh
   # 安裝 minikube
   brew install minikube
@@ -35,7 +35,7 @@
 
 ### 二、建立 Node.js Web App
 
-> 你也可以直接去[筆者的 github](https://github.com/dean9703111/nodejs-docker-k8s-auto-scaling-example)，直接將專案 clone 到本機來做測試。
+> 你也可以直接去[筆者的 github](https://github.com/dean9703111/nodejs-docker-k8s-auto-scaling-example)，直接將專案 Clone 到本機來做測試。
 
 - 建立`package.json`
   ```json
@@ -74,15 +74,14 @@
   console.log(`Running on http://${HOST}:${PORT}`);
   ```
 
-- 在終端機先輸入`yan`將套件安裝，再輸入`yarn start`確認專案可以運行
+- 在終端機先輸入`yarn`將套件安裝，再輸入`yarn start`確認專案可以運行
   ![image](./img/yarn_start.png)
   ![image](./img/yarn_start_web.png)
 
 ### 三、將 Node.js Web App 給 Docker 化
 
-依照如下步驟即可建立測試 Image
-
-- 建立`Dockerfile`
+- 建立`Dockerfile`  
+  填寫製作 Docker Image 時需要參考的環境＆指令。
 
   ```Dockerfile
   FROM node:14
@@ -106,14 +105,15 @@
   CMD [ "node", "server.js" ]
   ```
 
-- 建立`.dockerignore`
+- 建立`.dockerignore`  
+  填寫製作 Docker Image 時不想要複製的檔案。
 
   ```.dockerignore
   node_modules
   npm-debug.log
   ```
 
-- 建立 Docker Image
+- 製作 Docker Image
 
   ```sh
   # 登入 Docker
@@ -157,16 +157,14 @@
   ![image](./img/docker_run.png)
   ![image](./img/yarn_start_web.png)
 
-- 確認 Docker Image 運行狀態
+### 四、撰寫 K8s 使用的 yaml 檔＆部署 K8s
 
-### 四、撰寫 yaml 檔，部署 K8s
+- K8s 的 yaml 檔基礎說明
 
-- yaml 基礎說明
-
-  - apiVersion：API 版本，需要依照 kind 的物件來決定 version
-  - kind：建立的物件
-  - metadata：描述物件及標籤
-  - spec：物件要的功能
+  - **apiVersion**：API 版本，需要依照 kind 的物件來決定 version。
+  - **kind**：建立的物件。
+  - **metadata**：描述物件及標籤。
+  - **spec**：物件要的功能。
 
 - 建立`nodetest-k8s.yaml`來做測試範例，裡面的 image 等相關資訊記得算成自己的
 
@@ -219,14 +217,14 @@
 
   ![image](./img/k8s_apply.png)
 
-- 部署後查看 pods 狀態
+- 查看部署後 pods 狀態
 
   ```sh
   # 此指令會查 default namespace 的資源
   kubectl get pods
   ```
 
-  因為我們在 spec 的 replicas 的值設為 3，所以會產生 3 個 pods
+  因為我們在 spec 的 replicas 的值設為 3，所以會產生 3 個 pods。
   ![image](./img/k8s_default_pods.png)
 
 - 取得 deployment 的外部 ip，並點擊確認是否會顯示網頁
@@ -250,7 +248,7 @@ K8s 最吸引人的其中一個功能應該就是用 Auto Scaling 來應付高�
 
 ### 一、撰寫 Auto Scaling 的 yaml 檔
 
-> 你也可以直接去[筆者的 github](https://github.com/dean9703111/nodejs-docker-k8s-auto-scaling-example)，直接將專案 clone 到本機來做測試。
+> 你也可以直接去[筆者的 github](https://github.com/dean9703111/nodejs-docker-k8s-auto-scaling-example)，直接將專案 Clone 到本機來做測試。
 
 - HorizontalPodAutoscaler 參數說明
   - scaleTargetRef：填寫你想要針對哪個 ReplicaSet 或 Deployment 或 Replication Controller 來做 Scaling
